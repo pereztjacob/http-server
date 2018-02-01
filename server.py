@@ -14,7 +14,5 @@ def server():
         conn.send(message)
         conn.close()
 
-    
-
 if __name__ == "__main__":
     server()
