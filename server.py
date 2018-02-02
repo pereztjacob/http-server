@@ -1,18 +1,35 @@
-import sys
 import socket
 
 def server():
-    s = socket.socket()
-    host = socket.gethostname()
+	
+    s = socket.socket()         
+
+    host = socket.gethostname() 
+
     s.bind((host, 12345))
 
     s.listen(5)
+
     while True:
         conn, addr = s.accept()
-        message = conn.recv(1024)
+        
+        message = b''
+        while True:
+            data = conn.recv(1)
+            
+            if data == b'':
+                break
+            if data ==  b'\n':
+                break
+                
+            message += data
+
         print(message)
         conn.send(message)
-        conn.close()
+        return(message)
+        conn.close()     
 
-if __name__ == "__main__":
-    server()
+        if message.decode() == 'q':
+            break
+
+server()

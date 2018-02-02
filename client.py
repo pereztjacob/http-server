@@ -1,54 +1,44 @@
 import sys
 import socket
-import http.client
 
-def client(message,resp=False):
+def client(eom, message):
+
     s = socket.socket()
-    host = socket.gethostname()
-    res = socket.gethostbyaddr("127.0.0.1")
-    host = res[0]
+
+    host = socket.gethostname() 
 
     try:
-        s.connect((host, 12345))
+        s.connect( ( host, 12345 ) )
     except:
-        print("connection failed")
+        print("Connection Failed")
     else:
-        s.send(str.encode(message))
-        gett = s.recv(len(message))
-        result = gett.decode()
+        msg = str.encode(message) 
 
-        if(result == message):
-            print('go ahead', message)
+        s.sendall( msg )
 
+        if eom == "close":
+            print(message)
+            s.close()
+            return
+        elif eom == "LF":
+            s.send(str.encode("\n"))
 
+        raw = s.recv(len(message))
+
+        result = raw.decode()
+
+        
         s.close()
 
-def test_response():
-    host = 'www.google.com'
-    directories = ['aosicdjqwe0cd9qwe0d9q2we', 'reader', 'news']
-
-    for directory in directories:
-        conn = http.client.HTTPConnection(host)
-        conn.request('HEAD', '/' + directory)
-
-        url = 'http://{0}/{1}'.format(host, directory)
-
-        response = conn.getresponse()
-        print(response.status, response.reason)
-
-        conn.close()
-
-test_response()
-
-# def response_ok(host):
-#     conn = http.client.HTTPConnection(host)
-#     conn.request("HEAD")
-#     return conn.getresponse().status
-
-# print(response_ok("stackoverflow.com"))
-
+        if result == message:
+            print("OK: got echo")
+            return True
+        else:
+            print("FAILED: got some other message: " + result)
+            return False	
+	
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
-        print('not good')
-    else:
-        client(sys.argv[1])
+	if len(sys.argv) <= 2:
+		print("Usage: client EOM message")
+	else:
+		client(sys.argv[1], sys.argv[2])
