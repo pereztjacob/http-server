@@ -4,8 +4,8 @@ import socket
 s = socket.socket()
 host = socket.gethostname() 
 
-def client(eom, message):
-
+def client(message):
+    print('client running')
 # ////////////////////  CONNECT  ////////////////////////////////////////////////////////
     try:
         s.connect((host, 12345))
@@ -15,18 +15,9 @@ def client(eom, message):
         msg = str.encode(message) # TURN TO BINARY
 
         s.sendall( msg ) # SEND TO SERVER
-
-        if eom == "close":
-            print(message)
-            s.close()
-            return
-        elif eom == "LF":
-            s.send(str.encode("\n"))
-
-        raw = s.recv(len(message)) # RECIEVE FULL MESSAGE
-
-        result = raw.decode()
-        print(result)
+        print('past send')
+        var = read(s)
+        print('past read')
 
         s.close()
 
@@ -42,15 +33,34 @@ def make_request(message):
     body = message + CRLF
     full = head + CRLF + body + CRLF
 
-    client('close', full) # CALL CLIENT FOR (MESSAGE)
+    client(full) # CALL CLIENT FOR (MESSAGE)
 
-def parse_response():
-    while get bytes
-        break on CRLF
+def read(conn):
+    recov = b''
+    try:
+        # data = conn.recv(1)
+        pass
+    except:
+        print('failed to retrieve data')
+        return
+    # else:
+    #     print('data: ', data)
+    
+    # recov += data
+
+    return recov
+
+
+
+
+
+
+
+
+
 	
 if __name__ == "__main__":
-    if len(sys.argv) <= 2:
+    if len(sys.argv) != 2:
         print("Usage: client EOM message")
     else:
-        # client(sys.argv[1], sys.argv[2])
-        response_ok('hello world')
+        make_request('hello world')
