@@ -5,7 +5,6 @@ s = socket.socket()
 host = socket.gethostname() 
 
 def client(message):
-    print('client running')
 # ////////////////////  CONNECT  ////////////////////////////////////////////////////////
     try:
         s.connect((host, 12345))
@@ -13,11 +12,9 @@ def client(message):
         print("Connection Failed")
     else:
         msg = str.encode(message) # TURN TO BINARY
-
         s.sendall( msg ) # SEND TO SERVER
-        print('past send')
+        print(message)
         var = read(s)
-        print('past read')
 
         s.close()
 

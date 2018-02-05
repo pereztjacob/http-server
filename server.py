@@ -26,9 +26,7 @@ def server():
         print(message[1], message[0], status)
 
         msg = str.encode(message[1] + message[0] + status)
-        print('begin send')
         # conn.sendall(msg) # SEND MESSAGE BACK
-        print('end send')
         return(message, status)
 
 # ////////////////////////////  INITIALIZE PARSE FUNCTIONS  ////////////////////////////////////
